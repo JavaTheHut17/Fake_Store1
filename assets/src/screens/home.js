@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, ActivityIndicator} from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
@@ -14,45 +14,44 @@ const [data, setData] = useState([]);
 const [item, setItem] = useState('');
 const url ='https://fakestoreapi.com/products/categories';
 const navigation = useNavigation();
-
+const [isloading, setIsLoading] = useState(true);
 
 if(item === 'electronics'){
     navigation.navigate('Electronics');
-console.log('button pressed eletroncis')
+
+setItem();
 
 };
 
 if(item === 'jewelery'){
     navigation.navigate('Jewelery');
-    console.log('button pressed jewelery')
-    
+    setItem();    
 };
 if(item === 'men\'s clothing'){
-console.log('mens clothing clicked')
- navigation.navigate('MensClothing');
+    navigation.navigate('MensClothing'); 
+    setItem();
 };
 if(item === 'women\'s clothing'){
-    console.log('womens clothing clicked')
+    
      navigation.navigate('WomensClothing');
+     setItem();
     };
     
 
-
-useEffect(()=>{
-
-const fetchData = async (url)=>{
-
-  const res = await fetch(url);
-  const data = await res.json();
-setData(data);
-
-}
-fetchData(url);
-},[])
-// console.log(data)
+    useEffect(()=>{
+        const fetchData = async (url)=>{
+          try{const res = await fetch(url);
+          const data = await res.json();
+        setData(data);
+        setIsLoading(false);
+          }catch (error){   console.log(error)}
+        }
+        fetchData(url);
+    })
 
   return (
     <View style={styles.container}>
+       {isloading === true && <ActivityIndicator style={styles.container} size="large" />}
      <FlatList 
         data={data}
         renderItem={({ item }) => <View style={styles.itemBox}><Button title={item} onPress={()=>[setItem(item)]} style={styles.itemBox}><Text style={styles.item}>{item}</Text></Button></View>}

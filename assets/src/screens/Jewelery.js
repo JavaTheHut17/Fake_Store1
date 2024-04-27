@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, ActivityIndicator} from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { jeweleryItems } from '../datamodel/data';
 import { useState } from 'react';
@@ -13,34 +13,55 @@ export default function Jewelery() {
     const [items, setItems] = useState()
     const [id, setId] = useState();
     const navigation = useNavigation();
-   
-useEffect(()=>{
+   const [isloading, setIsLoading] = useState(true);
 
+useEffect(()=>{
     const fetchData = async (url)=>{
-    
-      const res = await fetch(url);
+      try{const res = await fetch(url);
       const data = await res.json();
     setItems(data);
-    
+    setIsLoading(false);
+      }catch (error){   console.log(error)}
     }
     fetchData(url);
-    },[])
-console.log(id)
+})
+
+// useEffect(()=>{
+
+//     const fetchData = async (url)=>{
+
+
+//     try{
+//         const res = await fetch(url);
+//       const data = await res.json();
+//     setItems(data);
+//     }catch (error){
+//         console.log(error)
+    
+//     }
+//     fetchData(url);
+// ),[]}
+
+// console.log(id)
+
+
+
     if(id == '5'){  
     navigation.navigate('Jewel5');
+    setId();
     }
 if(id == '6'){
     navigation.navigate('Jewel6');
-    
+    setId();
     }
 
     if(id == '7'){
         navigation.navigate('Jewel7');
-        
+        setId();
         }
         if(id == '8'){
             navigation.navigate('Jewel8');
-            
+            setId();
             }
     
 
@@ -48,6 +69,7 @@ if(id == '6'){
 
   return (
     <View style={styles.container}>
+       {isloading === true && <ActivityIndicator style={styles.container} size="large" />}
     <FlatList 
         data={items}
         renderItem={({ item }) => 
@@ -73,7 +95,7 @@ if(id == '6'){
 
         keyExtractor={(item) => item.id}
       ></FlatList>
-      
+      <Button title='Go Back' onPress={()=>navigation.goBack()}></Button>
       <StatusBar style="auto" />
     </View>
   );

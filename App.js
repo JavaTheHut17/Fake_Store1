@@ -8,10 +8,10 @@ const Stack = createStackNavigator();
 import Jewelery from './assets/src/screens/Jewelery';
 import MensClothing from './assets/src/screens/MensClothing';
 import WomensClothing from './assets/src/screens/WomensClothing';
-import Jewel5 from './assets/src/items/jewelery/jewel5';
-import Jewel6 from './assets/src/items/jewelery/jewel6';
-import Jewel7 from './assets/src/items/jewelery/jewel7';
-import Jewel8 from './assets/src/items/jewelery/jewel8';
+import Jewel5 from './assets/src/screens/items/Jewel5';
+import Jewel6 from './assets/src/screens/items/Jewel6';
+import Jewel7 from './assets/src/screens/items/Jewel7';
+import Jewel8 from './assets/src/screens/items/Jewel8';
 
 
 
@@ -28,7 +28,7 @@ export default function App() {
         <Stack.Screen name="Jewel6" component={Jewel6}/>
         <Stack.Screen name="Jewel7" component={Jewel7}/>
         <Stack.Screen name="Jewel8" component={Jewel8}/>
-      </Stack.Navigator>
+    </Stack.Navigator>
     </NavigationContainer>
   );
 }

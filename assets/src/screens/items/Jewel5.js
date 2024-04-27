@@ -1,19 +1,20 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
+const url = 'https://fakestoreapi.com/products';
+import { useState, useEffect } from 'react';
 
 
 export default function Jewel5() {
-    
+
+
   return (
     <View style={styles.container}>
-     <Text>jewel5</Text>
+     {/* <Text>{newItem.title}</Text> */}
      <Text>asdasdasdasd</Text>
       <StatusBar style="auto" />
     </View>
   );
 }
-
-
 
 const styles = StyleSheet.create({
   container: {
