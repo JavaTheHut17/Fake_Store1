@@ -2,15 +2,18 @@ import { StyleSheet, Text, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 
 
-export default function Electronics() {
+export default function Jewel5() {
     
   return (
     <View style={styles.container}>
-     <Text>Electronicsm</Text>
+     <Text>jewel5</Text>
+     <Text>asdasdasdasd</Text>
       <StatusBar style="auto" />
     </View>
   );
 }
+
+
 
 const styles = StyleSheet.create({
   container: {

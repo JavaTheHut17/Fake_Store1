@@ -16,33 +16,26 @@ const url ='https://fakestoreapi.com/products/categories';
 const navigation = useNavigation();
 
 
-
-
 if(item === 'electronics'){
     navigation.navigate('Electronics');
 console.log('button pressed eletroncis')
-setItem();
-}
+
+};
 
 if(item === 'jewelery'){
     navigation.navigate('Jewelery');
     console.log('button pressed jewelery')
-    setItem();
-}
+    
+};
 if(item === 'men\'s clothing'){
 console.log('mens clothing clicked')
  navigation.navigate('MensClothing');
-}
+};
 if(item === 'women\'s clothing'){
     console.log('womens clothing clicked')
      navigation.navigate('WomensClothing');
-    }
+    };
     
-
-// }
-
-
-
 
 
 useEffect(()=>{
@@ -85,7 +78,7 @@ const styles = StyleSheet.create({
   },
 
   itemBox: {
-    padding: 10,
+    padding: 5,
     margin: 10,
     backgroundColor: 'lightblue',
     borderRadius: 10,
