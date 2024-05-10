@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, ActivityIndicator, TouchableOpacity} from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { jeweleryItems } from '../datamodel/data';
 import { useState } from 'react';
@@ -8,6 +8,7 @@ import { useEffect } from 'react';
 const url = 'https://fakestoreapi.com/products/category/electronics';
 import { Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { dataload } from '../datamodel/data';
 
 export default function Electronics() {
     const [items, setItems] = useState()
@@ -15,35 +16,57 @@ export default function Electronics() {
     const navigation = useNavigation();
     const [isloading, setIsLoading] = useState(true);
 
-    useEffect(()=>{
-        const fetchData = async (url)=>{
-          try{const res = await fetch(url);
-          const data = await res.json();
-        setItems(data);
-        setIsLoading(false);
-          }catch (error){   console.log(error)}
-        }
-        fetchData(url);
-    })
-// console.log(id)
-//     if(id == '5'){  
-//     navigation.navigate('Jewel5');
-//     setId();
-//     }
-// if(id == '6'){
-//     navigation.navigate('Jewel6');
-//     setId();
-//     }
+    // useEffect(()=>{
+    //     const fetchData = async (url)=>{
+    //       try{const res = await fetch(url);
+    //       const data = await res.json();
+    //     setItems(data);
+    //     setIsLoading(false);
+    //       }catch (error){   console.log(error)}
+    //     }
+    //     fetchData(url);
+    // })
 
-//     if(id == '7'){
-//         navigation.navigate('Jewel7');
-//         setId();
-//         }
-//         if(id == '8'){
-//             navigation.navigate('Jewel8');
-//             setId();
-//             }
+    useEffect(() => {
+      const fetchData = async () => {
+       try{const data = await dataload(url);
+        setItems(data)
+        setIsLoading(false);}
+        catch{
+          console.log('error')
+        } // Log the fetched data
+      };
     
+      fetchData();
+    }, []);
+
+console.log(id)
+    if(id == '9'){  
+    navigation.navigate('Elec9');
+    setId();
+    }
+if(id == '10'){
+    navigation.navigate('Elec10');
+    setId();
+    }
+
+    if(id == '11'){
+        navigation.navigate('Elec11');
+        setId();
+        }
+        if(id == '12'){
+            navigation.navigate('Elec12');
+            setId();
+            }
+         if(id == '13'){
+          navigation.navigate('Elec13');
+          setId();
+          }
+          if(id == '14'){
+              navigation.navigate('Elec14');
+              setId();
+              }
+      
 
 
 
@@ -51,29 +74,25 @@ export default function Electronics() {
     <View style={styles.container}>
        
        {isloading === true && <ActivityIndicator style={styles.container} size="large" />}
-    <FlatList 
+       <FlatList
         data={items}
-        renderItem={({ item }) => 
-
-        <View style={styles.itemBox}>
-            <View style={styles.imageBoxContainer}>
-        <Image
-        style={styles.imageBox}
-        source={{ uri: item.image, }}/>
-        </View>
-
-            {/* <Text style={styles.item}>{item.id}</Text> */}
-            <View style={styles.informationBox}>
+        renderItem={({ item }) => (
+          <TouchableOpacity onPress={() => setId(item.id)}>
+            <View style={styles.itemBox}>
+              <View style={styles.imageBoxContainer}>
+                <Image style={styles.imageBox} source={{ uri: item.image }} />
+              </View>
+              {/* <Text style={styles.item}>{item.id}</Text> */}
+              <View style={styles.informationBox}>
                 <Text style={styles.titleText}>{item.title}</Text>
                 <Text style={styles.ratingText}>Rating:{item.rating.rate}</Text>
                 <Text style={styles.priceText}>Price: {item.price}</Text>
                 <Text>{item.id}</Text>
-                <Button title='Go-To' onPress={()=>setId(item.id)}></Button>
+                {/* <Button title='Go-To' onPress={()=>setId(item.id)}></Button> */}
+              </View>
             </View>
-           
-            </View>}
-
-
+          </TouchableOpacity>
+        )}
         keyExtractor={(item) => item.id}
       ></FlatList>
       <Button title='Go Back' onPress={()=>navigation.goBack()}></Button>

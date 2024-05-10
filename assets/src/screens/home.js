@@ -3,8 +3,9 @@ import { useEffect } from 'react';
 import { StyleSheet, Text, View, ActivityIndicator} from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { Button } from 'react-native';
+import { dataload } from '../datamodel/data';
 
 
 
@@ -37,17 +38,35 @@ if(item === 'women\'s clothing'){
      setItem();
     };
     
+    // useEffect((url)=>{
+    //   try{
+    //   dataload(url)}
+    // catch{
+    //   console.log('error')
+    // }
+    
+    // });
 
-    useEffect(()=>{
-        const fetchData = async (url)=>{
-          try{const res = await fetch(url);
-          const data = await res.json();
-        setData(data);
-        setIsLoading(false);
-          }catch (error){   console.log(error)}
-        }
-        fetchData(url);
-    })
+    useEffect(() => {
+      const fetchData = async () => {
+        const data = await dataload(url);
+        setData(data)
+        setIsLoading(false); // Log the fetched data
+      };
+    
+      fetchData();
+    }, []);
+console.log(data)
+    // useEffect(()=>{
+    //     const fetchData = async (url)=>{
+    //       try{const res = await fetch(url);
+    //       const data = await res.json();
+    //     setData(data);
+    //     setIsLoading(false);
+    //       }catch (error){   console.log(error)}
+    //     }
+    //     fetchData(url);
+    // })
 
   return (
     <View style={styles.container}>
@@ -58,6 +77,7 @@ if(item === 'women\'s clothing'){
         keyExtractor={(item) => item.id}
       ></FlatList>
       <StatusBar style="auto" />
+  
     </View>
   );
 }

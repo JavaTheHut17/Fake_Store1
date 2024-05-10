@@ -20,21 +20,21 @@
 
 // const jeweleryurl = 'https://fakestoreapi.com/products/category/jewelery';
 
-//     export async function saveData(MyData, key) {
-//         try {
-//         //   const existingData = await loadData();
+    // export async function saveData(MyData, key) {
+    //     try {
+    //     //   const existingData = await loadData();
       
-//         //   const dataArray = Array.isArray(existingData) ? existingData : [];
+    //     //   const dataArray = Array.isArray(existingData) ? existingData : [];
       
-//         //   dataArray.push(MyData);
+    //     //   dataArray.push(MyData);
       
-//           const str = JSON.stringify(MyData);
+    //       const str = JSON.stringify(MyData);
       
-//           await AsyncStorage.setItem(str, key);
-//         } catch (e) {
-//           console.log(`fail to save data`, e);
-//         }
-//       }
+    //       await AsyncStorage.setItem(str, key);
+    //     } catch (e) {
+    //       console.log(`fail to save data`, e);
+    //     }
+    //   }
       
 
 // const jeweleryData = saveData(jeweleryurl, 'JeweleryCat')
@@ -59,3 +59,34 @@
 // console.log(loadData('JeweleryCat'))
 
 // console.log(jeweleryData)
+
+
+// export async function dataload(url){
+// useEffect(()=>{
+//     const fetchData = async (url)=>{
+//       try{const res = await fetch(url);
+//       const data = await res.json();
+//     setData(data);
+//     setIsLoading(false);
+//     return data;
+//       }catch (error){   console.log(error)}
+//     }
+//     fetchData(url);
+// })
+// }
+import react from "react";
+
+// const url = 'https://fakestoreapi.com/products/categories';
+
+export async function dataload(url) {
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      console.log('data fetch', error);
+      return null;
+    }
+  }
+  
+

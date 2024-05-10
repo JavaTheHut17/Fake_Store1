@@ -10,7 +10,7 @@ import BackButton from "../../components/BackButton";
 import AddCart from "../../components/AddCart";
 import { dataload } from "../../datamodel/data";
 
-export default function Jewel8() {
+export default function Elec10() {
   const [items, setItems] = useState();
   const navigation = useNavigation();
   const [isloading, setIsLoading] = useState(true);
@@ -22,7 +22,7 @@ export default function Jewel8() {
       try {
         const data = await dataload(url);
         setItems(data);
-        const filteredItem = data.find((item) => item.id === 8);
+        const filteredItem = data.find((item) => item.id === 10);
         if (filteredItem) {
           setnewItems(filteredItem);
         }
