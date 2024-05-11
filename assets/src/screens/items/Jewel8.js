@@ -1,28 +1,24 @@
 import { StyleSheet, Text, View, ActivityIndicator } from "react-native";
 import { StatusBar } from "expo-status-bar";
-const url = "https://fakestoreapi.com/products";
 import { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Image } from "react-native";
-import { FlatList, ScrollView } from "react-native-gesture-handler";
-import { Button } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 import BackButton from "../../components/BackButton";
 import AddCart from "../../components/AddCart";
-import { dataload } from "../../datamodel/data";
+import {loadData } from "../../datamodel/data";
 
 export default function Jewel8() {
-  const [items, setItems] = useState();
   const navigation = useNavigation();
   const [isloading, setIsLoading] = useState(true);
-  const [isSeperate, setIsSeparate] = useState(false);
   const [newItems, setnewItems] = useState();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await dataload(url);
-        setItems(data);
-        const filteredItem = data.find((item) => item.id === 8);
+
+  useEffect(()=>{
+const firstLoad = async() =>{
+  try{
+const data = await loadData('allData');
+const filteredItem = data.find((item) => item.id === 8);
         if (filteredItem) {
           setnewItems(filteredItem);
         }
@@ -30,9 +26,9 @@ export default function Jewel8() {
       } catch (error) {
         console.log(error);
       }
-    };
-    fetchData();
-  });
+}
+firstLoad();
+  },[])
 
   if (isloading === true) {
     return (
@@ -97,6 +93,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     width: 200,
     marginBottom:10,
+    marginTop:10,
   },
 
   itemBox: {
@@ -127,7 +124,7 @@ const styles = StyleSheet.create({
   },
 
   informationBox: {
-    height: 300,
+    height: 360,
     width: 370,
   
     marginTop:20,
@@ -165,6 +162,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 4,
     padding: 5,
+    height:200,
     backgroundColor: "grey",
   },
 

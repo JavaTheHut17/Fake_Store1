@@ -6,48 +6,37 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
-import { jeweleryItems } from "../datamodel/data";
 import { useState } from "react";
-import { Button } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { useEffect } from "react";
-const url = "https://fakestoreapi.com/products/category/jewelery";
 import { Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { dataload } from "../datamodel/data";
+import { loadData } from "../datamodel/data";
+import BackButton from "../components/BackButton";
 
 export default function Jewelery() {
-  const [items, setItems] = useState();
+  const [newItems, setNewItems] = useState();
   const [id, setId] = useState();
   const navigation = useNavigation();
   const [isloading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const data = await dataload(url);
-      setItems(data);
-      setIsLoading(false); // Log the fetched data
+    const firstLoad = async () => {
+      try {
+        const data = await loadData("allData");
+        const resArray = [];
+        for (let i = 5; i < 9; i++) {
+          const filteredItem = data.find((item) => item.id === i);
+          resArray.push(filteredItem);
+        }
+        setNewItems(resArray);
+        setIsLoading(false);
+      } catch (error) {
+        console.log(error);
+      }
     };
-
-    fetchData();
+    firstLoad();
   }, []);
-
-  // useEffect(()=>{
-
-  //     const fetchData = async (url)=>{
-
-  //     try{
-  //         const res = await fetch(url);
-  //       const data = await res.json();
-  //     setItems(data);
-  //     }catch (error){
-  //         console.log(error)
-
-  //     }
-  //     fetchData(url);
-  // ),[]}
-
-  // console.log(id)
 
   if (id == "5") {
     navigation.navigate("Jewel5");
@@ -66,34 +55,45 @@ export default function Jewelery() {
     navigation.navigate("Jewel8");
     setId();
   }
+  
 
   return (
     <View style={styles.container}>
       {isloading === true && (
         <ActivityIndicator style={styles.container} size="large" />
       )}
+      {isloading === false && (
+        <View style={styles.categoryTitleBox}>
+          <Text style={styles.categoryTitle}>Electronics:</Text>
+        </View>
+      )}
       <FlatList
-        data={items}
+        data={newItems}
         renderItem={({ item }) => (
           <TouchableOpacity onPress={() => setId(item.id)}>
             <View style={styles.itemBox}>
               <View style={styles.imageBoxContainer}>
                 <Image style={styles.imageBox} source={{ uri: item.image }} />
               </View>
-              {/* <Text style={styles.item}>{item.id}</Text> */}
               <View style={styles.informationBox}>
-                <Text style={styles.titleText}>{item.title}</Text>
-                <Text style={styles.ratingText}>Rating:{item.rating.rate}</Text>
+                <View style={styles.titleBox}>
+                  <Text style={styles.titleText}>{item.title}</Text>
+                </View>
+                <Text style={styles.ratingText}>
+                  Rating: {item.rating.rate}
+                </Text>
                 <Text style={styles.priceText}>Price: {item.price}</Text>
-                {/* <Text>{item.id}</Text> */}
-                {/* <Button title='Go-To' onPress={()=>setId(item.id)}></Button> */}
               </View>
             </View>
           </TouchableOpacity>
         )}
         keyExtractor={(item) => item.id}
       ></FlatList>
-      <Button title="Go Back" onPress={() => navigation.goBack()}></Button>
+      {isloading === false && (
+        <View style={styles.buttonBox}>
+          <BackButton title="Go Back" onPress={() => navigation.goBack()} />
+        </View>
+      )}
       <StatusBar style="auto" />
     </View>
   );
@@ -116,10 +116,10 @@ const styles = StyleSheet.create({
     margin: 10,
     backgroundColor: "white",
     borderColor: "black",
-    borderWidth: 1,
+    borderWidth: 2,
     borderRadius: 10,
     width: 350,
-    height: 150,
+    height: 160,
     justifyContent: "flex-start",
     alignItems: "flex-start",
     flexDirection: "row",
@@ -130,55 +130,83 @@ const styles = StyleSheet.create({
     padding: 3,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "lightblue",
   },
   informationBox: {
-    height: 100,
+    height: 130,
     width: 195,
-    justifyContent: "flex-start",
-    alignItems: "flex-start",
+    justifyContent: "center",
+    alignItems: "center",
     flexDirection: "column",
   },
 
   imageBox: {
-    // padding: 10,
-    // margin: 10,
-    // borderRadius: 10,
     height: 120,
     width: 120,
     resizeMode: "contain",
     backgroundColor: "white",
-    // justifyContent: 'center',
-    // alignItems: 'center',
   },
 
   titleText: {
-    fontSize: 10,
+    fontSize: 13,
     fontWeight: "bold",
     color: "black",
     textAlign: "left",
     width: 200,
-    marginTop: 10,
-    marginLeft: 10,
+    marginTop: 3,
+    marginLeft: 5,
+    marginRight: 10,
+  },
+
+  titleBox: {
+    height: 80,
+    width: 200,
   },
 
   ratingText: {
-    fontSize: 10,
+    fontSize: 12,
     fontWeight: "bold",
     color: "black",
     textAlign: "left",
     width: 200,
-    marginTop: 15,
+    marginTop: 2,
     marginLeft: 10,
   },
 
   priceText: {
-    fontSize: 15,
+    fontSize: 20,
     fontWeight: "bold",
     color: "black",
-    textAlign: "left",
-    width: 200,
-    marginTop: 15,
-    marginLeft: 10,
+    textAlign: "center",
+    justifyContent: "flex-end",
+    width: 150,
+    marginTop: 10,
+    marginLeft: 2,
+    borderWidth: 1,
+    borderRadius: 4,
+    backgroundColor: "lightgrey",
+  },
+
+  buttonBox: {
+    height: 30,
+    width: 350,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  categoryTitleBox: {
+    padding: 5,
+    margin: 10,
+    backgroundColor: "skyblue",
+    borderRadius: 10,
+    justifyContent: "center",
+    alignItems: "center",
+    width: 350,
+    height: 50,
+    marginTop: 25,
+    marginBottom: 5,
+  },
+
+  categoryTitle: {
+    fontSize: 30,
+    fontWeight: "bold",
   },
 });

@@ -8,7 +8,7 @@ import BackButton from "../../components/BackButton";
 import AddCart from "../../components/AddCart";
 import {loadData } from "../../datamodel/data";
 
-export default function Jewel5() {
+export default function Womens19() {
   const navigation = useNavigation();
   const [isloading, setIsLoading] = useState(true);
   const [newItems, setnewItems] = useState();
@@ -18,7 +18,7 @@ export default function Jewel5() {
 const firstLoad = async() =>{
   try{
 const data = await loadData('allData');
-const filteredItem = data.find((item) => item.id === 5);
+const filteredItem = data.find((item) => item.id === 19);
         if (filteredItem) {
           setnewItems(filteredItem);
         }

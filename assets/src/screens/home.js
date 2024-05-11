@@ -1,83 +1,74 @@
-import { StatusBar } from 'expo-status-bar';
-import { useEffect } from 'react';
-import { StyleSheet, Text, View, ActivityIndicator} from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
-import { useState } from 'react';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
-import { Button } from 'react-native';
-import { dataload } from '../datamodel/data';
-
-
-
+import { StatusBar } from "expo-status-bar";
+import { useEffect } from "react";
+import { StyleSheet, Text, View, ActivityIndicator } from "react-native";
+import { FlatList } from "react-native-gesture-handler";
+import { useState } from "react";
+import { useNavigation } from "@react-navigation/native";
+import { Button } from "react-native";
+import { dataload} from "../datamodel/data";
 
 export default function Home() {
-const [data, setData] = useState([]);
-const [item, setItem] = useState('');
-const url ='https://fakestoreapi.com/products/categories';
-const navigation = useNavigation();
-const [isloading, setIsLoading] = useState(true);
+  const [data, setData] = useState([]);
+  const [item, setItem] = useState("");
+  const url = "https://fakestoreapi.com/products/categories";
+  const navigation = useNavigation();
+  const [isloading, setIsLoading] = useState(true);
 
-if(item === 'electronics'){
-    navigation.navigate('Electronics');
+  if (item === "electronics") {
+    navigation.navigate("Electronics");
 
-setItem();
-
-};
-
-if(item === 'jewelery'){
-    navigation.navigate('Jewelery');
-    setItem();    
-};
-if(item === 'men\'s clothing'){
-    navigation.navigate('MensClothing'); 
     setItem();
-};
-if(item === 'women\'s clothing'){
-    
-     navigation.navigate('WomensClothing');
-     setItem();
-    };
-    
-    // useEffect((url)=>{
-    //   try{
-    //   dataload(url)}
-    // catch{
-    //   console.log('error')
-    // }
-    
-    // });
+  }
+  if (item === "jewelery") {
+    navigation.navigate("Jewelery");
+    setItem();
+  }
+  if (item === "men's clothing") {
+    navigation.navigate("MensClothing");
+    setItem();
+  }
+  if (item === "women's clothing") {
+    navigation.navigate("WomensClothing");
+    setItem();
+  }
 
-    useEffect(() => {
-      const fetchData = async () => {
-        const data = await dataload(url);
-        setData(data)
-        setIsLoading(false); // Log the fetched data
-      };
-    
-      fetchData();
-    }, []);
-console.log(data)
-    // useEffect(()=>{
-    //     const fetchData = async (url)=>{
-    //       try{const res = await fetch(url);
-    //       const data = await res.json();
-    //     setData(data);
-    //     setIsLoading(false);
-    //       }catch (error){   console.log(error)}
-    //     }
-    //     fetchData(url);
-    // })
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await dataload(url);
+      setData(data);
+      setIsLoading(false); // Log the fetched data
+    };
+
+    fetchData();
+  }, []);
+  console.log(data);
 
   return (
     <View style={styles.container}>
-       {isloading === true && <ActivityIndicator style={styles.container} size="large" />}
-     <FlatList 
+      {isloading === true && (
+        <ActivityIndicator style={styles.container} size="large" />
+      )}
+      {isloading === false && (
+        <View style={styles.categoryTitleBox}>
+          <Text style={styles.categoryTitle}>Categories:</Text>
+        </View>
+      )}
+      <FlatList
         data={data}
-        renderItem={({ item }) => <View style={styles.itemBox}><Button title={item} onPress={()=>[setItem(item)]} style={styles.itemBox}><Text style={styles.item}>{item}</Text></Button></View>}
+        renderItem={({ item }) => (
+          <View style={styles.itemBox}>
+            <Button
+              title={item}
+              onPress={() => [setItem(item)]}
+              style={styles.itemBox}
+            >
+              <Text style={styles.item}>{item}</Text>
+            </Button>
+          </View>
+        )}
         keyExtractor={(item) => item.id}
       ></FlatList>
       <StatusBar style="auto" />
-  
     </View>
   );
 }
@@ -85,25 +76,41 @@ console.log(data)
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'yellow',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "lightyellow",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 20,
   },
-  item:{
+  item: {
     fontSize: 24,
-    fontWeight: 'bold'
-    
-
+    fontWeight: "bold",
   },
 
   itemBox: {
     padding: 5,
     margin: 10,
-    backgroundColor: 'lightblue',
+    backgroundColor: "lightblue",
     borderRadius: 10,
     width: 300,
     height: 50,
+    marginTop: 20,
   },
 
+  categoryTitleBox: {
+    padding: 5,
+    margin: 10,
+    backgroundColor: "skyblue",
+    borderRadius: 10,
+    justifyContent: "center",
+    alignItems: "center",
+    width: 350,
+    height: 60,
+    marginTop: 20,
+    marginBottom: 20,
+  },
 
+  categoryTitle: {
+    fontSize: 30,
+    fontWeight: "bold",
+  },
 });
