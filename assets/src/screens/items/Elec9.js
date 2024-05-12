@@ -6,19 +6,21 @@ import { Image } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import BackButton from "../../components/BackButton";
 import AddCart from "../../components/AddCart";
-import {loadData } from "../../datamodel/data";
+import { loadData } from "../../datamodel/data";
+import { useDispatch } from "react-redux";
+import { addItemCart } from "../../redux/cartSlice";
 
 export default function Elec9() {
   const navigation = useNavigation();
   const [isloading, setIsLoading] = useState(true);
   const [newItems, setnewItems] = useState();
+  const dispatch = useDispatch();
 
-
-  useEffect(()=>{
-const firstLoad = async() =>{
-  try{
-const data = await loadData('allData');
-const filteredItem = data.find((item) => item.id === 9);
+  useEffect(() => {
+    const firstLoad = async () => {
+      try {
+        const data = await loadData("allData");
+        const filteredItem = data.find((item) => item.id === 9);
         if (filteredItem) {
           setnewItems(filteredItem);
         }
@@ -26,9 +28,9 @@ const filteredItem = data.find((item) => item.id === 9);
       } catch (error) {
         console.log(error);
       }
-}
-firstLoad();
-  },[])
+    };
+    firstLoad();
+  }, []);
 
   if (isloading === true) {
     return (
@@ -58,13 +60,11 @@ firstLoad();
           </View>
           <Text style={styles.descriptionTitle}>Description:</Text>
           <ScrollView>
-          <Text style={styles.descriptionText}>
-            {newItems.description}
-          </Text>
+            <Text style={styles.descriptionText}>{newItems.description}</Text>
           </ScrollView>
           <View style={styles.buttonContainer}>
             <BackButton title=" Back" onPress={() => navigation.goBack()} />
-            <AddCart title="Add to Cart" />
+            <AddCart onPress={() => dispatch(addItemCart(newItems))} title="Add to Cart" />
           </View>
         </View>
         <StatusBar style="auto" />
@@ -78,10 +78,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "Blue",
     alignItems: "center",
-    alignContent:'center',
+    alignContent: "center",
     justifyContent: "center",
     flexDirection: "column",
-   
   },
   item: {
     fontSize: 20,
@@ -92,8 +91,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-evenly",
     width: 200,
-    marginBottom:10,
-    marginTop:10,
+    marginBottom: 10,
+    marginTop: 10,
   },
 
   itemBox: {
@@ -126,8 +125,8 @@ const styles = StyleSheet.create({
   informationBox: {
     height: 360,
     width: 370,
-  
-    marginTop:20,
+
+    marginTop: 20,
     alignItems: "center",
   },
 
@@ -138,15 +137,14 @@ const styles = StyleSheet.create({
     marginTop: 5,
     justifyContent: "space-evenly",
     width: 300,
- 
   },
 
   buttonstyle: {
     backgroundColor: "blue",
     height: 50,
     width: 100,
-    justifyContent: "center", 
-    alignItems: "center", 
+    justifyContent: "center",
+    alignItems: "center",
     borderRadius: 10,
   },
 
@@ -162,7 +160,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 4,
     padding: 5,
-    height:200,
+    height: 200,
     backgroundColor: "grey",
   },
 
@@ -182,9 +180,8 @@ const styles = StyleSheet.create({
     padding: 5,
     paddingLeft: 5,
   },
-  descriptionTitle:{
-
-    fontSize:20,
-    fontWeight:"bold",
-  }
+  descriptionTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+  },
 });

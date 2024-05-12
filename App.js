@@ -17,7 +17,7 @@ import Elec12 from './assets/src/screens/items/Elec12';
 import Elec13 from './assets/src/screens/items/Elec13';
 import Elec14 from './assets/src/screens/items/Elec14';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Cart from './assets/src/screens/Cart';
+import Cart from './assets/src/components/Cart';
 import Mens1 from './assets/src/screens/items/Mens1';
 import Mens2 from './assets/src/screens/items/Mens2';
 import Mens3 from './assets/src/screens/items/Mens3';
@@ -29,12 +29,21 @@ import Womens18 from './assets/src/screens/items/Womens18';
 import Womens19 from './assets/src/screens/items/Womens19';
 import Womens20 from './assets/src/screens/items/Womens20';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useState } from 'react';
+import store from './assets/src/redux/store';
+import { Provider } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { totalCartItems, totalItemCount } from './assets/src/redux/cartSlice';
+import { totalItems } from './assets/src/components/Cart';
 
 const Stack = createStackNavigator();
 const Tabs = createBottomTabNavigator();
 
+
 const HomeStack = () => (
+  
   <Stack.Navigator>
+    
     <Stack.Screen name="Home" component={Home} options={{headerShown:false}} />
     <Stack.Screen name="Electronics" component={Electronics} options={{headerShown:false}}/>
     <Stack.Screen name="Jewelery" component={Jewelery} options={{headerShown:false}}/>
@@ -61,16 +70,37 @@ const HomeStack = () => (
     <Stack.Screen name="Womens18" component={Womens18} options={{headerShown:false}}/>
     <Stack.Screen name="Womens19" component={Womens19} options={{headerShown:false}}/>
     <Stack.Screen name="Womens20" component={Womens20} options={{headerShown:false}}/>
+    {/* <Stack.Screen name='app' component={App}/> */}
+ 
   </Stack.Navigator>
+    
 );
 
+
 export default function App() {
+ const [tabBadgeCount, setTabBadgeCount] = useState(0);
+
+
+
   return (
-    <NavigationContainer>
+    
+    <NavigationContainer> 
+      <Provider store={store}>
+     
       <Tabs.Navigator>
-        <Tabs.Screen name="Home" component={HomeStack} options={{tabBarIcon: ({})=>(<Ionicons name='home' size={23} color='blue'/>),headerShown:false}}/>
-        <Tabs.Screen name="Cart" component={Cart}  options={{tabBarIcon: ({})=>(<Ionicons name='cart' size={25} color='blue'/>),headerShown:false}} />
+      
+        <Tabs.Screen name="Home" component={HomeStack} options={{tabBarIcon: ({})=>(<Ionicons name='home' size={23} color='blue'/>),
+        headerShown:false}}/>
+        <Tabs.Screen name="Cart" component={Cart}  options={{tabBarIcon: ({})=>(<Ionicons name='cart' size={25} color='blue'/>),
+        headerShown:false, tabBarBadge:tabBadgeCount || null}} />
+        
       </Tabs.Navigator>
-    </NavigationContainer>
+       </Provider>
+    </NavigationContainer> 
+     
+     
   );
 }
+
+
+

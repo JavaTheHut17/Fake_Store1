@@ -71,7 +71,7 @@ export default function WomensClothing() {
       )}
       {isloading === false && (
         <View style={styles.categoryTitleBox}>
-          <Text style={styles.categoryTitle}>Electronics:</Text>
+          <Text style={styles.categoryTitle}>Women's Clothing:</Text>
         </View>
       )}
       <FlatList
@@ -89,7 +89,7 @@ export default function WomensClothing() {
                 <Text style={styles.ratingText}>
                   Rating: {item.rating.rate}
                 </Text>
-                <Text style={styles.priceText}>Price: {item.price}</Text>
+                <Text style={styles.priceText}>Price: ${item.price}</Text>
               </View>
             </View>
           </TouchableOpacity>

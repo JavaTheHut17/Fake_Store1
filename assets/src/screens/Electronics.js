@@ -89,7 +89,7 @@ export default function Electronics() {
                 <Text style={styles.ratingText}>
                   Rating: {item.rating.rate}
                 </Text>
-                <Text style={styles.priceText}>Price: {item.price}</Text>
+                <Text style={styles.priceText}>Price: ${item.price}</Text>
               </View>
             </View>
           </TouchableOpacity>
