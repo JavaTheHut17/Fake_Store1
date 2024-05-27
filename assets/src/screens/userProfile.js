@@ -4,6 +4,9 @@ import {
     View,
     ActivityIndicator,
     TouchableOpacity,
+    Button,
+    
+
   } from "react-native";
   import { StatusBar } from "expo-status-bar";
   import { useState } from "react";
@@ -13,30 +16,155 @@ import {
   import { useNavigation } from "@react-navigation/native";
   import { loadData } from "../datamodel/data";
   import BackButton from "../components/BackButton";
-  
+  import { fetchGetUsers } from "../Services/Serverfetch";
+ import { TextInput } from "react-native-gesture-handler";
+import { postUserSignUp } from "../Services/Serverfetch";
+import { postUserLogIn } from "../Services/Serverfetch";
+
   
   export default function UserProfile() {
     const [newItems, setNewItems] = useState();
     const [id, setId] = useState();
     const navigation = useNavigation();
     const [isloading, setIsLoading] = useState(false);
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [response, setResponse] = useState(null);
+    const [LogInSwitch, setLogInSwitch] = useState(true);
+    const [SignUpSwitch,setSignUpSwitch] = useState(false);
+
+
+
+const signUp = async () =>{
+
+const newData = {name,
+     email, 
+     password};
+const res = await postUserSignUp(newData);
+setResponse(res);
+setTimeout(() => {
+    
+
+if(response.status == 'error'){
+    alert(response.message)
+}else if(response.status == 'OK'){
+    alert('Account Created Succsessfully')
+
+}
+}, 1000)
+}
+const logInSwitchFunc =()=>{
+setLogInSwitch(false);
+setSignUpSwitch(true);
+}
+
+const signUpSwitchFunc =()=>{
+setSignUpSwitch(false);
+setLogInSwitch(true);
+}
+
+
+const logIn = async () =>{
+
+const newData = {email, password};
+
+const res = await postUserLogIn(newData);
+setResponse(res);
+console.log(res);
+
+
+
+
+if(response.status == 'OK'){
+    const tokenHold = {
+token: response.token,
+email: response.email,
+name: response.name,
+id: response.id,
+}
+navigation.navigate('userAccount', {tokenHold});
+
+}
+
+    if(response.status == 'error'){
+    alert(response.message)
+}    
+}
+
+
   
-  
+
+
+
+
     return (
       <View style={styles.container}>
         {isloading === true && (
           <ActivityIndicator style={styles.container} size="large" />
         )}
-        {isloading === false && (
+            
+            {SignUpSwitch === true && (
+        <View style={styles.container}>
           <View style={styles.categoryTitleBox}>
-            <Text style={styles.categoryTitle}>User Profile:</Text>
-          </View>
-        )}
-   
+            <Text style={styles.categoryTitle}>Sign Up:</Text>
+          </View>  
+
+            <View style={styles.logInWindow}>
+            
+            <TextInput
+            style={styles.textWindow}
+                placeholder="Name"
+                value={name}
+                onChangeText={setName}
+            />
+            <TextInput
+            style={styles.textWindow}
+                placeholder="Email"
+                value={email}
+                onChangeText={setEmail}
+            />
+            <TextInput
+            style={styles.textWindow}
+                placeholder="Password"
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry
+            />
+            <Button title="Sign Up" onPress={() => signUp()} />
+            <Button title='Log In?' onPress={() => signUpSwitchFunc()} />
+                </View> 
+                </View>
+)}
 
 
+{LogInSwitch === true && (
+        <View style={styles.container}>
+          <View style={styles.categoryTitleBox}>
+            <Text style={styles.categoryTitle}>Log In:</Text>
+          </View>  
 
-   
+            <View style={styles.logInWindow}>
+            
+            <TextInput
+            style={styles.textWindow}
+                placeholder="Email"
+                value={email}
+                onChangeText={setEmail}
+            />
+            <TextInput
+            style={styles.textWindow}
+                placeholder="Password"
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry
+            />
+            <Button style={styles.buttonBox} title="Log In" onPress={() => logIn()} />
+            <Button title='Sign Up?' onPress={() => logInSwitchFunc()} />
+                </View> 
+                </View>
+)}
+
 
         {isloading === false && (
           <View style={styles.buttonBox}>
@@ -46,7 +174,7 @@ import {
         <StatusBar style="auto" />
   
   
-  
+       
       </View>
     );
   }
@@ -63,40 +191,20 @@ import {
       fontWeight: "bold",
     },
   
-    itemBox: {
-      padding: 10,
-      margin: 10,
-      backgroundColor: "white",
+    logInWindow: {
+    //   padding: 10,
+    //   margin: 10,
+      backgroundColor: "skyblue",
       borderColor: "black",
       borderWidth: 2,
-      borderRadius: 10,
+      borderRadius: 2,
       width: 350,
-      height: 160,
-      justifyContent: "flex-start",
-      alignItems: "flex-start",
-      flexDirection: "row",
-    },
-    imageBoxContainer: {
-      height: 130,
-      width: 130,
-      padding: 3,
-      justifyContent: "center",
-      alignItems: "center",
-    },
-    informationBox: {
-      height: 130,
-      width: 195,
+      height: 200,
       justifyContent: "center",
       alignItems: "center",
       flexDirection: "column",
     },
-  
-    imageBox: {
-      height: 120,
-      width: 120,
-      resizeMode: "contain",
-      backgroundColor: "white",
-    },
+   
   
     titleText: {
       fontSize: 13,
@@ -112,6 +220,7 @@ import {
     titleBox: {
       height: 80,
       width: 200,
+      borderWidth: 1,
     },
   
     ratingText: {
@@ -143,23 +252,42 @@ import {
       width: 350,
       justifyContent: "center",
       alignItems: "center",
+      backgroundColor: 'rgba(0, 0, 0, 0)',
     },
     categoryTitleBox: {
-      padding: 5,
-      margin: 10,
+    //   padding: 5,
+    //   margin: 10,
       backgroundColor: "skyblue",
-      borderRadius: 10,
+      borderRadius: 2,
       justifyContent: "center",
       alignItems: "center",
       width: 350,
       height: 50,
       marginTop: 25,
-      marginBottom: 5,
+      borderWidth: 2,
+    
     },
   
     categoryTitle: {
       fontSize: 30,
       fontWeight: "bold",
     },
+
+
+    textWindow: {
+
+        backgroundColor: "white",
+        width: 170,
+        padding:5,
+        marginTop:5,
+        textAlign: "center",
+        borderWidth:1,
+
+
+
+
+
+
+    }
   });
   

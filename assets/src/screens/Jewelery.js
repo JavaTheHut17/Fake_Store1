@@ -175,6 +175,7 @@ const styles = StyleSheet.create({
     width: 350,
     justifyContent: "center",
     alignItems: "center",
+    
   },
   categoryTitleBox: {
     padding: 5,

@@ -17,8 +17,10 @@ import Details from './assets/src/screens/items/Details.js';
 import { totalItemCount } from './assets/src/redux/cartSlice';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import MyOrders from './assets/src/screens/myOrders';
+import UserAccount from './assets/src/screens/userAccount';
 import UserProfile from './assets/src/screens/userProfile';
 // import BottomTabs from './assets/src/components/BottomTabs';
+
 
 const Stack = createStackNavigator();
 const Tabs = createBottomTabNavigator();
@@ -37,7 +39,8 @@ const Screens = () => {
       <Stack.Screen name="men's clothing" component={MensClothing} options={{ headerShown: false }} />
       <Stack.Screen name="women's clothing" component={WomensClothing} options={{ headerShown: false }} />
       <Stack.Screen name='Details' component={Details} options={{ headerShown: false }} />
-      {/* <Stack.Screen name="BottomTabs" component={BottomTabs} options={{headerShown:false}}/> */}
+      {/* <Stack.Screen name='userProfile' component={UserProfile} options={{ headerShown: false }} /> */}
+      <Stack.Screen name='userAccount' component={UserAccount} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 }
@@ -48,6 +51,7 @@ const Screens = () => {
 
 export default function App() {
  const [tabBadgeCount, setTabBadgeCount] = useState();
+
 
 
 
@@ -69,7 +73,7 @@ export default function App() {
         headerShown:false, tabBarBadge:tabBadgeCount || null}} />
 
 <Tabs.Screen name="userProfile" component={UserProfile}  options={{tabBarIcon: ({})=>(<Ionicons name='person-circle' size={25} color='blue'/>),
-        headerShown:false, tabBarBadge:tabBadgeCount || null}} />
+        headerShown:false, tabBarBadge:tabBadgeCount || null}}  />
 
 
      </Tabs.Navigator>
