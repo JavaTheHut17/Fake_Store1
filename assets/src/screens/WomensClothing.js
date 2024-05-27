@@ -38,31 +38,7 @@ export default function WomensClothing() {
     firstLoad();
   }, []);
 
-  if (id == "15") {
-    navigation.navigate("Womens15");
-    setId();
-  }
-  if (id == "16") {
-    navigation.navigate("Womens16");
-    setId();
-  }
 
-  if (id == "17") {
-    navigation.navigate("Womens17");
-    setId();
-  }
-  if (id == "18") {
-    navigation.navigate("Womens18");
-    setId();
-  }
-  if (id == "19") {
-    navigation.navigate("Womens19");
-    setId();
-  }
-  if (id == "20") {
-    navigation.navigate("Womens20");
-    setId();
-  }
 
   return (
     <View style={styles.container}>
@@ -77,7 +53,7 @@ export default function WomensClothing() {
       <FlatList
         data={newItems}
         renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => setId(item.id)}>
+          <TouchableOpacity onPress={() => navigation.navigate('Details', {item: item})}>
             <View style={styles.itemBox}>
               <View style={styles.imageBoxContainer}>
                 <Image style={styles.imageBox} source={{ uri: item.image }} />

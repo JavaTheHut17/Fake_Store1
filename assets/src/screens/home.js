@@ -1,12 +1,16 @@
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
-import { StyleSheet, Text, View, ActivityIndicator } from "react-native";
+import { StyleSheet, Text, View, ActivityIndicator, TouchableOpacity } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Button } from "react-native";
 import { dataload} from "../datamodel/data";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
+
+
+  const Tabs = createBottomTabNavigator();
 export default function Home() {
   const [data, setData] = useState([]);
   const [item, setItem] = useState("");
@@ -14,24 +18,7 @@ export default function Home() {
   const navigation = useNavigation();
   const [isloading, setIsLoading] = useState(true);
 
-  if (item === "electronics") {
-    navigation.navigate("Electronics");
-
-    setItem();
-  }
-  if (item === "jewelery") {
-    navigation.navigate("Jewelery");
-    setItem();
-  }
-  if (item === "men's clothing") {
-    navigation.navigate("MensClothing");
-    setItem();
-  }
-  if (item === "women's clothing") {
-    navigation.navigate("WomensClothing");
-    setItem();
-  }
-
+ 
   useEffect(() => {
     const fetchData = async () => {
       const data = await dataload(url);
@@ -42,6 +29,7 @@ export default function Home() {
     fetchData();
   }, []);
   console.log(data);
+console.log(data)
 
   return (
     <View style={styles.container}>
@@ -56,22 +44,25 @@ export default function Home() {
       <FlatList
         data={data}
         renderItem={({ item }) => (
-          <View style={styles.itemBox}>
-            <Button
+          <TouchableOpacity onPress={() => navigation.navigate(item)}>
+          <View style={styles.itemBox}
+            
               title={item}
-              onPress={() => [setItem(item)]}
-              style={styles.itemBox}
+            
             >
               <Text style={styles.item}>{item}</Text>
-            </Button>
-          </View>
+            </View>
+          
+        </TouchableOpacity>
         )}
         keyExtractor={(item) => item.id}
       ></FlatList>
       <StatusBar style="auto" />
+
     </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {

@@ -38,24 +38,8 @@ export default function Jewelery() {
     firstLoad();
   }, []);
 
-  if (id == "5") {
-    navigation.navigate("Jewel5");
-    setId();
-  }
-  if (id == "6") {
-    navigation.navigate("Jewel6");
-    setId();
-  }
 
-  if (id == "7") {
-    navigation.navigate("Jewel7");
-    setId();
-  }
-  if (id == "8") {
-    navigation.navigate("Jewel8");
-    setId();
-  }
-  
+
 
   return (
     <View style={styles.container}>
@@ -70,7 +54,7 @@ export default function Jewelery() {
       <FlatList
         data={newItems}
         renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => setId(item.id)}>
+          <TouchableOpacity onPress={() => navigation.navigate('Details', {item: item})}>
             <View style={styles.itemBox}>
               <View style={styles.imageBoxContainer}>
                 <Image style={styles.imageBox} source={{ uri: item.image }} />

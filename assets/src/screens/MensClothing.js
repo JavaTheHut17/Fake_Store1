@@ -38,24 +38,7 @@ export default function MensClothing() {
     firstLoad();
   }, []);
 
-  if (id == "1") {
-    navigation.navigate("Mens1");
-    setId();
-  }
-  if (id == "2") {
-    navigation.navigate("Mens2");
-    setId();
-  }
-
-  if (id == "3") {
-    navigation.navigate("Mens3");
-    setId();
-  }
-  if (id == "4") {
-    navigation.navigate("Mens4");
-    setId();
-  }
-
+  
   return (
     <View style={styles.container}>
       {isloading === true && (
@@ -69,7 +52,7 @@ export default function MensClothing() {
       <FlatList
         data={newItems}
         renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => setId(item.id)}>
+          <TouchableOpacity onPress={() => navigation.navigate('Details', {item: item})}>
             <View style={styles.itemBox}>
               <View style={styles.imageBoxContainer}>
                 <Image style={styles.imageBox} source={{ uri: item.image }} />

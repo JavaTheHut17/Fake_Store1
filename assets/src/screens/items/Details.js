@@ -10,19 +10,23 @@ import { loadData } from "../../datamodel/data";
 import { useDispatch } from "react-redux";
 import { addItemCart } from "../../redux/cartSlice";
 
-export default function Elec12() {
+export default function Details({route}) {
+    const {item} = route.params;
   const navigation = useNavigation();
   const [isloading, setIsLoading] = useState(true);
   const [newItems, setnewItems] = useState();
   const dispatch = useDispatch();
+  
+
+
 
   useEffect(() => {
     const firstLoad = async () => {
       try {
         const data = await loadData("allData");
-        const filteredItem = data.find((item) => item.id === 12);
-        if (filteredItem) {
-          setnewItems(filteredItem);
+        // const filteredItem = data.find((item) => item.id === 9);
+        if(item){
+          setnewItems(item);
         }
         setIsLoading(false);
       } catch (error) {
@@ -47,6 +51,9 @@ export default function Elec12() {
   if (isloading === false) {
     return (
       <View style={styles.container}>
+        <View style={styles.categoryTitleBox}>
+          <Text style={styles.categoryTitle}>Product Details:</Text>
+        </View>
         <View style={styles.imageBox}>
           <Image style={styles.image} source={{ uri: newItems.image }} />
         </View>
@@ -123,10 +130,10 @@ const styles = StyleSheet.create({
   },
 
   informationBox: {
-    height: 360,
+    height: 340,
     width: 370,
 
-    marginTop: 20,
+    marginTop: 10,
     alignItems: "center",
   },
 
@@ -160,7 +167,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 4,
     padding: 5,
-    height: 200,
+    height: 150,
     backgroundColor: "grey",
   },
 
@@ -182,6 +189,24 @@ const styles = StyleSheet.create({
   },
   descriptionTitle: {
     fontSize: 20,
+    fontWeight: "bold",
+  },
+
+  categoryTitleBox: {
+    padding: 2,
+    // margin: 10,
+    backgroundColor: "skyblue",
+    borderRadius: 10,
+    justifyContent: "center",
+    alignItems: "center",
+    width: 350,
+    height: 35,
+    marginTop: 25,
+    marginBottom: 5,
+  },
+
+  categoryTitle: {
+    fontSize: 30,
     fontWeight: "bold",
   },
 });

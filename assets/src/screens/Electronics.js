@@ -14,6 +14,7 @@ import { useNavigation } from "@react-navigation/native";
 import { loadData } from "../datamodel/data";
 import BackButton from "../components/BackButton";
 
+
 export default function Electronics() {
   const [newItems, setNewItems] = useState();
   const [id, setId] = useState();
@@ -38,31 +39,6 @@ export default function Electronics() {
     firstLoad();
   }, []);
 
-  if (id == "9") {
-    navigation.navigate("Elec9");
-    setId();
-  }
-  if (id == "10") {
-    navigation.navigate("Elec10");
-    setId();
-  }
-
-  if (id == "11") {
-    navigation.navigate("Elec11");
-    setId();
-  }
-  if (id == "12") {
-    navigation.navigate("Elec12");
-    setId();
-  }
-  if (id == "13") {
-    navigation.navigate("Elec13");
-    setId();
-  }
-  if (id == "14") {
-    navigation.navigate("Elec14");
-    setId();
-  }
 
   return (
     <View style={styles.container}>
@@ -77,7 +53,7 @@ export default function Electronics() {
       <FlatList
         data={newItems}
         renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => setId(item.id)}>
+          <TouchableOpacity onPress={() => navigation.navigate('Details', {item: item})}>
             <View style={styles.itemBox}>
               <View style={styles.imageBoxContainer}>
                 <Image style={styles.imageBox} source={{ uri: item.image }} />
@@ -102,6 +78,9 @@ export default function Electronics() {
         </View>
       )}
       <StatusBar style="auto" />
+
+
+
     </View>
   );
 }
