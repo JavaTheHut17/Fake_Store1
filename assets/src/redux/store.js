@@ -5,11 +5,11 @@ import profileSliceReducer from "./profileSlice";
 
 export default configureStore({
     reducer: {
+
         cart: cartReducer,
         myOrders: myOrdersReducer,
         profileSlice: profileSliceReducer,
 
-        
     },
     });
 

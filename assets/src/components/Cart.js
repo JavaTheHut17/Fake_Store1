@@ -36,17 +36,32 @@ const checkOutHandler = () => {
 dispatch(updateItemsDB(itemsWithCount));
 dispatch(cartAdd(itemsWithCount));
 
+}
 
 
+//Check Out Func ( PostCart & PostOrder )
+const checkOut = async () => {
+    
+
+// Post Cart Data
+  try {
+    const res = await postCart({items:cartData},token);
+    if (res && res.status === 'OK') {
+        alert('Order Placed Successfully');
+    } else if (res && res.error) {
+        alert('Order Failed: ' + res.error);
+    } else {
+      console.log('unexpected=', res)
+        throw new Error('Unexpected response from server');
+    }
+} catch (error) {
+    console.log('checkOut Error:', error);
+    alert('An error occurred during checkout. Please try again.');
 }
 
 
 
-const checkOut = async () => {
-    
-
-// console.log(items, tokenValue)
-
+//Post Order 
   try {
       const res = await postNewUserOrder({items:items},tokenValue);
       if (res && res.status === 'OK') {
@@ -69,7 +84,7 @@ const checkOut = async () => {
   
 };
 
-
+//Order Fetch
 const getOrders = async() =>{
 console.log('called')
   try{
@@ -85,32 +100,6 @@ console.log('called')
   alert('An error occurred during Get Orders.');
 }
 }
-console.log(cartData)
-
-
-
-const postCartFunc = async () => {
-console.log(cartData, token)
-  try {
-    const res = await postCart({items:cartData},token);
-    if (res && res.status === 'OK') {
-        alert('Order Placed Successfully');
-    } else if (res && res.error) {
-        alert('Order Failed: ' + res.error);
-    } else {
-      console.log('unexpected=', res)
-        throw new Error('Unexpected response from server');
-    }
-} catch (error) {
-    console.log('checkOut Error:', error);
-    alert('An error occurred during checkout. Please try again.');
-}
-
-
-
-}
-
-
 
 
 
@@ -154,7 +143,7 @@ renderItem={({ item }) => (
 
 )}>
 </FlatList>
-<Text>Cart Total: ${cartTotal}</Text>
+<Text>Cart Total: ${(cartTotal*100/100).toFixed(2)}</Text>
 <Text>Total Items: {totalItemCount}</Text>
 <Button title='proceed to checkout' onPress={() => checkOutHandler()} />
  {itemsWithCount.length > 0 && <Button title='Check Out' onPress={() => checkOut()} /> }

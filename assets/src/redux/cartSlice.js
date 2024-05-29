@@ -52,12 +52,7 @@ export const cartSlice = createSlice({
 
     },
 
-    // badgeCount: (state) => {
-    //   const count = state.cartItems.length;
-    //   state.totalItemCount = count;
-    //   return state.totalItemCount;
-    // },
-
+  
     increaseItemCount: (state, action) => {
       const indx = state.itemsWithCount.findIndex(
         (item) => item.id == action.payload
@@ -66,7 +61,6 @@ export const cartSlice = createSlice({
      state.cartTotal += state.itemsWithCount[indx].price
      state.totalItemCount +=1;
 
- 
 
       
     },
@@ -88,7 +82,6 @@ export const cartSlice = createSlice({
         state.cartItems = updatedItems;
       }
 
- 
 
     },
     emptyCart: (state)=>{
@@ -121,13 +114,7 @@ const data = action.payload;
         
         }))
 
-    
-
     }
-
-
-
-
   },
 });
 

@@ -13,8 +13,8 @@ logInState: (state, action) => {
 state.isAuthenticated = true;
 
 },
-logOutState: (state) => {
 
+logOutState: (state) => {
 state.isAuthenticated = false;
 
 },

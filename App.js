@@ -17,16 +17,12 @@ import Details from './assets/src/screens/items/Details.js';
 import { totalItemCount } from './assets/src/redux/cartSlice';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import MyOrders from './assets/src/screens/myOrders';
-import UserAccount from './assets/src/screens/userAccount';
 import UserProfile from './assets/src/screens/userProfile';
 // import BottomTabs from './assets/src/components/BottomTabs';
 import profileSlice from './assets/src/redux/profileSlice';
 
 const Stack = createStackNavigator();
 const Tabs = createBottomTabNavigator();
-
-
-
 
 
 const Screens = () => {
@@ -39,7 +35,6 @@ const Screens = () => {
       <Stack.Screen name="men's clothing" component={MensClothing} options={{ headerShown: false }} />
       <Stack.Screen name="women's clothing" component={WomensClothing} options={{ headerShown: false }} />
       <Stack.Screen name='Details' component={Details} options={{ headerShown: false }} />
-      <Stack.Screen name='userAccount' component={UserAccount} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 }

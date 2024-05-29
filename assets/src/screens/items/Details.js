@@ -16,9 +16,6 @@ export default function Details({route}) {
   const [isloading, setIsLoading] = useState(true);
   const [newItems, setnewItems] = useState();
   const dispatch = useDispatch();
-  
-
-
 
   useEffect(() => {
     const firstLoad = async () => {

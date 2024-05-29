@@ -18,27 +18,18 @@ cartItems:[],
 
 addOrder: (state, action) => {
 state.unpaidOrders = action.payload
-
-
-
 },
 
 tokenGrab: (state, action) =>{
-
 state.token = action.payload
-
-
 },
-
-
 
 cartGrab: (state, action) =>{
-
 state.cartItems = action.payload
-
-
-
 },
+
+
+
 // OrderSep :(state, action) => {
 // const data = action.payload;
 // const res = data.map((item)=>({
@@ -52,7 +43,6 @@ state.cartItems = action.payload
 // console.log('token:', state.token)
 // }
 
-  
 
   }
 });

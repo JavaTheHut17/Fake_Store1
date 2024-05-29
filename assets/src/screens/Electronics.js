@@ -78,9 +78,6 @@ export default function Electronics() {
         </View>
       )}
       <StatusBar style="auto" />
-
-
-
     </View>
   );
 }

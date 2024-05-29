@@ -8,8 +8,6 @@ import { Button } from "react-native";
 import { dataload} from "../datamodel/data";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-
-
   const Tabs = createBottomTabNavigator();
 export default function Home() {
   const [data, setData] = useState([]);
@@ -25,7 +23,6 @@ export default function Home() {
       setData(data);
       setIsLoading(false); // Log the fetched data
     };
-
     fetchData();
   }, []);
 
