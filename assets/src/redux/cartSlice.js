@@ -11,6 +11,7 @@ export const cartSlice = createSlice({
     itemsWithCount: [],
     cartTotal: 0,
     items: [],
+    cartData:[],
   },
 
   reducers: {
@@ -109,6 +110,19 @@ export const cartSlice = createSlice({
       }))
       state.items =  res;
     
+    },
+
+    cartAdd: (state, action) => {
+const data = action.payload;
+      state.cartData = data.map((item)=>({
+        id: item.id,
+        price: item.price,
+        count: item.ItemCount
+        
+        }))
+
+    
+
     }
 
 
@@ -117,7 +131,7 @@ export const cartSlice = createSlice({
   },
 });
 
-export const { addItemCart, badgeCount, increaseItemCount, decreaseItemCount, emptyCart, updateItemsDB} =
+export const { addItemCart, badgeCount, increaseItemCount, decreaseItemCount, emptyCart, updateItemsDB, cartAdd} =
   cartSlice.actions;
 export const cartArray = (state) => state.cart.cartItems;
 export const totalCartItems = (state) => state.cart.totalItemCount;
@@ -127,4 +141,5 @@ export const itemsWithCount = (state) => state.cart.itemsWithCount;
 export const cartTotal = (state) => state.cart.cartTotal;
 export const totalItemCount = (state) => state.cart.totalItemCount;
 export const items = (state) => state.cart.items;
+export const cartData = (state) => state.cart.cartData;
 export default cartSlice.reducer;

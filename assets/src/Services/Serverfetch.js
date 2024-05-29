@@ -106,3 +106,29 @@ export const getUserOrders = async (userData) => {
     }
 
 
+    export const postCart = async (userData, token) => {
+        try {
+            const url = `${server}:${port}/cart`;
+            const res = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify(userData),
+            });
+    
+            if (!res.ok) {
+                // Handle non-OK responses (e.g., 4xx or 5xx errors)
+                throw new Error(`HTTP error! Status: ${res.status}`);
+
+            }
+    
+            const responseData = await res.json();
+            return responseData; // Return the parsed response data
+        } catch (error) {
+            console.log('postNewUserOrder Error:', error);
+            // Return an error object or message to indicate the failure
+            return { error: 'An error occurred while processing your request.' };
+        }
+    };

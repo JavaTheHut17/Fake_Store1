@@ -1,14 +1,14 @@
 import { View, StyleSheet, Text, FlatList, Button, Image} from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
-import { increaseItemCount, decreaseItemCount, totalItemCount, emptyCart, updateItemsDB} from "../redux/cartSlice";
+import { increaseItemCount, decreaseItemCount, totalItemCount, emptyCart, updateItemsDB, cartAdd} from "../redux/cartSlice";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from "@react-navigation/native";
 import { OrderSep, addOrder, cartGrab } from "../redux/myOrdersSlice";
 import { postNewUserOrder } from "../Services/Serverfetch";
 import { useEffect } from "react";
 import { getUserOrders } from "../Services/Serverfetch";
-
+import { postCart } from "../Services/Serverfetch";
 
 export const totalItems =() =>{
   return totalItemCount;
@@ -24,22 +24,28 @@ const cartTotal = useSelector(state => state.cart.cartTotal);
 const totalItemCount = useSelector(state => state.cart.totalItemCount);
 const [cartItems, setCartItems] = useState(itemsWithCount);
 const token= useSelector(state => state.myOrders.token);
+const cartData = useSelector(state => state.cart.cartData);
 
 const items = useSelector(state => state.cart.items);
 const [tokenValue, setTokenValue] = useState(token);
 
+
+
 const checkOutHandler = () => {
 
 dispatch(updateItemsDB(itemsWithCount));
+dispatch(cartAdd(itemsWithCount));
+
+
 
 }
 
 
 
 const checkOut = async () => {
+    
 
-
-console.log(items, tokenValue)
+// console.log(items, tokenValue)
 
   try {
       const res = await postNewUserOrder({items:items},tokenValue);
@@ -55,7 +61,7 @@ console.log(items, tokenValue)
       console.log('checkOut Error:', error);
       alert('An error occurred during checkout. Please try again.');
   }
-
+  
   navigation.navigate('myOrders');
   dispatch(cartGrab(itemsWithCount))
   dispatch(emptyCart());
@@ -78,9 +84,34 @@ console.log('called')
   console.error('Get Orders failed:', error);
   alert('An error occurred during Get Orders.');
 }
+}
+console.log(cartData)
+
+
+
+const postCartFunc = async () => {
+console.log(cartData, token)
+  try {
+    const res = await postCart({items:cartData},token);
+    if (res && res.status === 'OK') {
+        alert('Order Placed Successfully');
+    } else if (res && res.error) {
+        alert('Order Failed: ' + res.error);
+    } else {
+      console.log('unexpected=', res)
+        throw new Error('Unexpected response from server');
+    }
+} catch (error) {
+    console.log('checkOut Error:', error);
+    alert('An error occurred during checkout. Please try again.');
+}
+
 
 
 }
+
+
+
 
 
 
@@ -127,6 +158,7 @@ renderItem={({ item }) => (
 <Text>Total Items: {totalItemCount}</Text>
 <Button title='proceed to checkout' onPress={() => checkOutHandler()} />
  {itemsWithCount.length > 0 && <Button title='Check Out' onPress={() => checkOut()} /> }
+ <Button title='Post Cart' onPress={() => postCartFunc()} />
 
 
 

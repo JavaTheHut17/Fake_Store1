@@ -86,7 +86,7 @@ const logIn = async () => {
   try {
     const res = await postUserLogIn(newData);
     setResponse(res);
-    console.log(res);
+    // console.log(res);
 
     if (res.status === 'OK') {
       const tokenHold = {
