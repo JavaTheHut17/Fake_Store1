@@ -31,17 +31,11 @@ const [tokenValue, setTokenValue] = useState(token);
 
 
 
-const checkOutHandler = () => {
-
-dispatch(updateItemsDB(itemsWithCount));
-dispatch(cartAdd(itemsWithCount));
-
-}
-
-
 //Check Out Func ( PostCart & PostOrder )
 const checkOut = async () => {
     
+  dispatch(updateItemsDB(itemsWithCount));
+  dispatch(cartAdd(itemsWithCount));
 
 // Post Cart Data
   try {
@@ -145,13 +139,7 @@ renderItem={({ item }) => (
 </FlatList>
 <Text>Cart Total: ${(cartTotal*100/100).toFixed(2)}</Text>
 <Text>Total Items: {totalItemCount}</Text>
-<Button title='proceed to checkout' onPress={() => checkOutHandler()} />
  {itemsWithCount.length > 0 && <Button title='Check Out' onPress={() => checkOut()} /> }
- <Button title='Post Cart' onPress={() => postCartFunc()} />
-
-
-
-
 
 </View>
 );
