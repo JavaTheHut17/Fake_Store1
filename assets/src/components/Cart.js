@@ -1,8 +1,14 @@
 import { View, StyleSheet, Text, FlatList, Button, Image} from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
-import { increaseItemCount, decreaseItemCount, totalItemCount} from "../redux/cartSlice";
+import { increaseItemCount, decreaseItemCount, totalItemCount, emptyCart, updateItemsDB} from "../redux/cartSlice";
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useNavigation } from "@react-navigation/native";
+import { OrderSep, addOrder } from "../redux/myOrdersSlice";
+import { postNewUserOrder } from "../Services/Serverfetch";
+import { useEffect } from "react";
+import { getUserOrders } from "../Services/Serverfetch";
+
 
 export const totalItems =() =>{
   return totalItemCount;
@@ -12,10 +18,69 @@ export const totalItems =() =>{
 
 export default function Cart() {
 const dispatch = useDispatch();
-
+const navigation = useNavigation();
 const itemsWithCount = useSelector(state => state.cart.itemsWithCount);
 const cartTotal = useSelector(state => state.cart.cartTotal);
 const totalItemCount = useSelector(state => state.cart.totalItemCount);
+const [cartItems, setCartItems] = useState(itemsWithCount);
+const token= useSelector(state => state.myOrders.token);
+
+const items = useSelector(state => state.cart.items);
+const [tokenValue, setTokenValue] = useState(token);
+
+const checkOutHandler = () => {
+
+dispatch(updateItemsDB(itemsWithCount));
+
+}
+
+
+
+const checkOut = async () => {
+
+
+console.log(items, tokenValue)
+
+  try {
+      const res = await postNewUserOrder({items:items},tokenValue);
+      if (res && res.status === 'OK') {
+          alert('Order Placed Successfully');
+      } else if (res && res.error) {
+          alert('Order Failed: ' + res.error);
+      } else {
+        console.log('unexpected=', res)
+          throw new Error('Unexpected response from server');
+      }
+  } catch (error) {
+      console.log('checkOut Error:', error);
+      alert('An error occurred during checkout. Please try again.');
+  }
+
+  navigation.navigate('myOrders');
+  dispatch(emptyCart());
+ getOrders();
+  
+};
+
+
+const getOrders = async() =>{
+console.log('called')
+  try{
+    const res1 = await getUserOrders(tokenValue);
+    if(res1.status === 'OK'){ 
+      alert('Orders fetched successfully')
+      dispatch(addOrder(res1.orders))
+  }else if (res1.status === 'error'){
+    alert(res1.message);
+  }
+}catch(error){
+  console.error('Get Orders failed:', error);
+  alert('An error occurred during Get Orders.');
+}
+
+
+}
+
 
 
 return (
@@ -45,7 +110,7 @@ renderItem={({ item }) => (
       <Text style={styles.titleText}>{item.title}</Text> 
       <Text>Item Count: {item.ItemCount}</Text>
     <View style={styles.buttonBox}>
-    <Ionicons name='add-circle' size={20} color='blue' onPress={()=> dispatch(increaseItemCount(item.id))} />
+    <Ionicons name='add-circle' size={20} color='blue' onPress={()=> dispatch(increaseItemCount(item.id)) } />
     <Ionicons name='close-circle' color='red' size={20} onPress={()=> dispatch(decreaseItemCount(item.id))} />
     </View>
 
@@ -59,6 +124,13 @@ renderItem={({ item }) => (
 </FlatList>
 <Text>Cart Total: ${cartTotal}</Text>
 <Text>Total Items: {totalItemCount}</Text>
+<Button title='proceed to checkout' onPress={() => checkOutHandler()} />
+ {itemsWithCount.length > 0 && <Button title='Check Out' onPress={() => checkOut()} /> }
+
+
+
+
+
 </View>
 );
 

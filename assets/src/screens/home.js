@@ -28,8 +28,7 @@ export default function Home() {
 
     fetchData();
   }, []);
-  console.log(data);
-console.log(data)
+
 
   return (
     <View style={styles.container}>

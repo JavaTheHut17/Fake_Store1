@@ -20,10 +20,18 @@ import {
  import { TextInput } from "react-native-gesture-handler";
 import { postUserSignUp } from "../Services/Serverfetch";
 import { postUserLogIn } from "../Services/Serverfetch";
+import { getUserOrders } from "../Services/Serverfetch";
+import profileSlice from "../redux/profileSlice";
+  import { useSelector
+   } from "react-redux";
+   import { logInState, logOutState } from "../redux/profileSlice";
+import { useDispatch } from "react-redux";
+import { addOrder, tokenGrab } from "../redux/myOrdersSlice";
 
-  
+
+
   export default function UserProfile() {
-    const [newItems, setNewItems] = useState();
+    const [newItems, setNewItems] = useState('');
     const [id, setId] = useState();
     const navigation = useNavigation();
     const [isloading, setIsLoading] = useState(false);
@@ -33,27 +41,34 @@ import { postUserLogIn } from "../Services/Serverfetch";
     const [response, setResponse] = useState(null);
     const [LogInSwitch, setLogInSwitch] = useState(true);
     const [SignUpSwitch,setSignUpSwitch] = useState(false);
+    const isAuthenticated = useSelector((state) => state.profileSlice.isAuthenticated);
+
+const dispatch = useDispatch();
 
 
 
-const signUp = async () =>{
-
-const newData = {name,
-     email, 
-     password};
-const res = await postUserSignUp(newData);
-setResponse(res);
-setTimeout(() => {
+    const signUp = async () => {
+      const newData = {
+        name,
+        email,
+        password,
+      };
+      try {
+        const res = await postUserSignUp(newData);
+        setResponse(res);
     
+        if (res.status === 'OK') {
+          alert('Account Created Successfully');
+        } else if (res.status === 'error') {
+          alert(res.message);
+        }
+      } catch (error) {
+        console.error('Sign up failed:', error);
+        alert('An error occurred during sign up.');
+      }
+    };
 
-if(response.status == 'error'){
-    alert(response.message)
-}else if(response.status == 'OK'){
-    alert('Account Created Succsessfully')
 
-}
-}, 1000)
-}
 const logInSwitchFunc =()=>{
 setLogInSwitch(false);
 setSignUpSwitch(true);
@@ -65,42 +80,65 @@ setLogInSwitch(true);
 }
 
 
-const logIn = async () =>{
+const logIn = async () => {
+  const newData = { email, password };
 
-const newData = {email, password};
+  try {
+    const res = await postUserLogIn(newData);
+    setResponse(res);
+    console.log(res);
 
-const res = await postUserLogIn(newData);
-setResponse(res);
-console.log(res);
+    if (res.status === 'OK') {
+      const tokenHold = {
+        token: res.token,
+        email: res.email,
+        name: res.name,
+        id: res.id,
+      };
+      dispatch(logInState());
+      // navigation.navigate('userAccount', { tokenHold });
+     setNewItems(tokenHold);
+    dispatch(tokenGrab(tokenHold.token));
+    
+      try{
+        const res1 = await getUserOrders(tokenHold.token);
+        if(res1.status === 'OK'){ 
+          
+          dispatch(addOrder(res1.orders))
+      }else if (res1.status === 'error'){
+        alert(res1.message);
+      }
+    }catch(error){
+      console.error('Get Orders failed:', error);
+      alert('An error occurred during Get Orders.');
+    }
 
-
-
-
-if(response.status == 'OK'){
-    const tokenHold = {
-token: response.token,
-email: response.email,
-name: response.name,
-id: response.id,
-}
-navigation.navigate('userAccount', {tokenHold});
-
-}
-
-    if(response.status == 'error'){
-    alert(response.message)
-}    
-}
-
-
+    } else if (res.status === 'error') {
+      alert(res.message);
+    }
+  } catch (error) {
+    console.error('Login failed:', error);
+    alert('An error occurred during login.');
+  } 
   
+ 
 
+
+};
+
+  const signOut = () => {
+dispatch(logOutState());
+setNewItems('');
+
+  }
 
 
 
     return (
+
       <View style={styles.container}>
-        {isloading === true && (
+        
+        {isloading === true && isAuthenticated === false && (
           <ActivityIndicator style={styles.container} size="large" />
         )}
             
@@ -137,8 +175,9 @@ navigation.navigate('userAccount', {tokenHold});
                 </View>
 )}
 
+            
 
-{LogInSwitch === true && (
+{LogInSwitch === true && isAuthenticated === false && (
         <View style={styles.container}>
           <View style={styles.categoryTitleBox}>
             <Text style={styles.categoryTitle}>Log In:</Text>
@@ -164,6 +203,23 @@ navigation.navigate('userAccount', {tokenHold});
                 </View> 
                 </View>
 )}
+
+
+{isAuthenticated === true &&
+  <View style={styles.container}>
+  <View style={styles.categoryTitleBox}>
+    <Text style={styles.categoryTitle}>User Profile:</Text>
+  </View>  
+    <Text style={styles.textWindow}>Name:{newItems.name}</Text>
+   <Text style={styles.textWindow}>Email:{newItems.email}</Text>
+<Button title="Sign Out" onPress={() => signOut()} />
+<Button title='Update Profile' />
+</View>
+}
+
+  
+  
+  
 
 
         {isloading === false && (

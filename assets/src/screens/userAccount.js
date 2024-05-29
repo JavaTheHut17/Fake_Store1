@@ -20,7 +20,7 @@ import {
  import { TextInput } from "react-native-gesture-handler";
 import { postUserSignUp } from "../Services/Serverfetch";
 import { postUserLogIn } from "../Services/Serverfetch";
-
+import { useDispatch } from "react-redux";
   
   export default function UserAccount({route}) {
     const [newItems, setNewItems] = useState();
@@ -34,24 +34,11 @@ import { postUserLogIn } from "../Services/Serverfetch";
     const [LogInSwitch, setLogInSwitch] = useState(true);
     const [SignUpSwitch,setSignUpSwitch] = useState(false);
     const {tokenHold} = route.params;
+    const dispatch = useDispatch();
+
+    // dispatch(tokenHold)
 
 
-// const signUp = async () =>{
-// const newData = {name,
-//      email, 
-//      password};
-// const res = await postUserSignUp(newData);
-// setResponse(res);
-
-// if(response.status == 'error'){
-//     alert(response.message)
-// }
-
-// if(response.status == 'OK'){
-//     alert('Account Created Succsessfully')
-
-// }
-// }
 
 
     return (

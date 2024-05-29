@@ -8,7 +8,7 @@ import BackButton from "../../components/BackButton";
 import AddCart from "../../components/AddCart";
 import { loadData } from "../../datamodel/data";
 import { useDispatch } from "react-redux";
-import { addItemCart } from "../../redux/cartSlice";
+import { addItemCart, updateItemsDB } from "../../redux/cartSlice";
 
 export default function Details({route}) {
     const {item} = route.params;

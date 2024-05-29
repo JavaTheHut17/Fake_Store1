@@ -20,7 +20,7 @@ import MyOrders from './assets/src/screens/myOrders';
 import UserAccount from './assets/src/screens/userAccount';
 import UserProfile from './assets/src/screens/userProfile';
 // import BottomTabs from './assets/src/components/BottomTabs';
-
+import profileSlice from './assets/src/redux/profileSlice';
 
 const Stack = createStackNavigator();
 const Tabs = createBottomTabNavigator();
@@ -28,8 +28,8 @@ const Tabs = createBottomTabNavigator();
 
 
 
+
 const Screens = () => {
- 
 
   return (
     <Stack.Navigator initialRouteName='Home'>
@@ -39,22 +39,52 @@ const Screens = () => {
       <Stack.Screen name="men's clothing" component={MensClothing} options={{ headerShown: false }} />
       <Stack.Screen name="women's clothing" component={WomensClothing} options={{ headerShown: false }} />
       <Stack.Screen name='Details' component={Details} options={{ headerShown: false }} />
-      {/* <Stack.Screen name='userProfile' component={UserProfile} options={{ headerShown: false }} /> */}
       <Stack.Screen name='userAccount' component={UserAccount} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 }
 
 
+const TabBar = () =>{
+ const isAuthenticated = useSelector((state) => state.profileSlice.isAuthenticated);
+ const totalItemCount = useSelector((state) => state.cart.totalItemCount);
 
+
+const authGuard = (name, {navigation}) => ({
+tabPress: (e) =>{
+
+  e.preventDefault();
+if(isAuthenticated){
+  navigation.navigate(name)
+} else {
+  alert('User Not Logged in.')
+}
+
+}
+})
+
+
+return (
+ <Tabs.Navigator>
+      
+        <Tabs.Screen name="Home" component={Screens} options={{tabBarIcon: ({})=>(<Ionicons name='home' size={23} color='blue'/>),
+        headerShown:false}}/>
+     
+        <Tabs.Screen name="Cart" component={Cart}  options={{tabBarIcon: ({})=>(<Ionicons name='cart' size={25} color='blue'/>),
+        headerShown:false, tabBarBadge:totalItemCount || null}}listeners={authGuard.bind(null, 'Cart')} />
+    <Tabs.Screen name="myOrders" component={MyOrders}  options={{tabBarIcon: ({})=>(<Ionicons name='gift' size={25} color='blue'/>),
+        headerShown:false, tabBarBadge: null}} listeners={authGuard.bind(null, 'myOrders')} />
+
+<Tabs.Screen name="userProfile" component={UserProfile}  options={{tabBarIcon: ({})=>(<Ionicons name='person-circle' size={25} color='blue'/>),
+        headerShown:false, tabBarBadge: null}}  />
+</Tabs.Navigator>
+ 
+
+)
+}
 
 
 export default function App() {
- const [tabBadgeCount, setTabBadgeCount] = useState();
-
-
-
-
 
   return (
  <GestureHandlerRootView style={{flex: 1}}>
@@ -62,22 +92,8 @@ export default function App() {
     
        <NavigationContainer> 
           
-   <Tabs.Navigator>
-      
-        <Tabs.Screen name="Home" component={Screens} options={{tabBarIcon: ({})=>(<Ionicons name='home' size={23} color='blue'/>),
-        headerShown:false}}/>
+                  <TabBar/>
      
-        <Tabs.Screen name="Cart" component={Cart}  options={{tabBarIcon: ({})=>(<Ionicons name='cart' size={25} color='blue'/>),
-        headerShown:false, tabBarBadge:tabBadgeCount || null}} />
-    <Tabs.Screen name="myOrders" component={MyOrders}  options={{tabBarIcon: ({})=>(<Ionicons name='gift' size={25} color='blue'/>),
-        headerShown:false, tabBarBadge:tabBadgeCount || null}} />
-
-<Tabs.Screen name="userProfile" component={UserProfile}  options={{tabBarIcon: ({})=>(<Ionicons name='person-circle' size={25} color='blue'/>),
-        headerShown:false, tabBarBadge:tabBadgeCount || null}}  />
-
-
-     </Tabs.Navigator>
- 
     </NavigationContainer>
        </Provider>
     </GestureHandlerRootView>

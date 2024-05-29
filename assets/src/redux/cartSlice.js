@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { OrderSep } from "./myOrdersSlice";
 
 export const cartSlice = createSlice({
   name: "cart",
@@ -9,9 +10,13 @@ export const cartSlice = createSlice({
     itemCountArray: [],
     itemsWithCount: [],
     cartTotal: 0,
+    items: [],
   },
 
   reducers: {
+
+
+
     addItemCart: (state, action) => {
       
       const data = action.payload;
@@ -41,15 +46,16 @@ export const cartSlice = createSlice({
          state.cartTotal += state.itemsWithCount[indx].price
          state.totalItemCount +=1;
       }
+   
 
 
     },
 
-    badgeCount: (state) => {
-      const count = state.cartItems.length;
-      state.totalItemCount = count;
-      return state.totalItemCount;
-    },
+    // badgeCount: (state) => {
+    //   const count = state.cartItems.length;
+    //   state.totalItemCount = count;
+    //   return state.totalItemCount;
+    // },
 
     increaseItemCount: (state, action) => {
       const indx = state.itemsWithCount.findIndex(
@@ -59,7 +65,9 @@ export const cartSlice = createSlice({
      state.cartTotal += state.itemsWithCount[indx].price
      state.totalItemCount +=1;
 
+ 
 
+      
     },
     decreaseItemCount: (state, action) => {
       const indx = state.itemsWithCount.findIndex(
@@ -78,11 +86,38 @@ export const cartSlice = createSlice({
         state.itemsWithCount = updatedItems;
         state.cartItems = updatedItems;
       }
+
+ 
+
     },
+    emptyCart: (state)=>{
+
+      state.itemsWithCount = [];
+      state.cartItems = [];
+      state.cartTotal = 0;
+      state.totalItemCount = 0;
+
+    },
+
+    updateItemsDB: (state, action) =>{
+      const data = action.payload;
+      const res = data.map((item)=>({
+        prodID : item.id,
+        price : state.cartTotal,
+        quantity : item.ItemCount
+      
+      }))
+      state.items =  res;
+    
+    }
+
+
+
+
   },
 });
 
-export const { addItemCart, badgeCount, increaseItemCount, decreaseItemCount } =
+export const { addItemCart, badgeCount, increaseItemCount, decreaseItemCount, emptyCart, updateItemsDB} =
   cartSlice.actions;
 export const cartArray = (state) => state.cart.cartItems;
 export const totalCartItems = (state) => state.cart.totalItemCount;
@@ -91,4 +126,5 @@ export const itemCountArray = (state) => state.cart.itemCountArray;
 export const itemsWithCount = (state) => state.cart.itemsWithCount;
 export const cartTotal = (state) => state.cart.cartTotal;
 export const totalItemCount = (state) => state.cart.totalItemCount;
+export const items = (state) => state.cart.items;
 export default cartSlice.reducer;

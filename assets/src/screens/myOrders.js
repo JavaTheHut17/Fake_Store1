@@ -14,14 +14,22 @@ import {
   import { loadData } from "../datamodel/data";
   import BackButton from "../components/BackButton";
   import { UseDispatch } from "react-redux";
- 
-  export default function MyOrders() {
+ import { useSelector } from "react-redux";
+import { addOrder } from "../redux/myOrdersSlice";
+
+
+  export default function MyOrders({route}) {
     const [newItems, setNewItems] = useState();
     const [id, setId] = useState();
     const navigation = useNavigation();
     const [isloading, setIsLoading] = useState(false);
     // const dispatch = useDispatch();
+    const unpaidOrders = useSelector((state) => state.myOrders.unpaidOrders);
+    const resUnpaidOrders = useSelector((state) => state.myOrders.resUnpaidOrders);
 
+
+
+console.log('unpaidOrders: ', unpaidOrders)
 
 
     return (
@@ -35,10 +43,16 @@ import {
           </View>
         )}
    
-
-
-
-
+<FlatList
+data={unpaidOrders}
+renderItem={({ item }) => (
+<View>
+  <View style={styles.itemBox}><Text>{item.title}</Text></View>
+  <View style={styles.itemBox}><Text>{item.id}</Text></View>
+  <View style={styles.itemBox}><Text>{item.order_items}price</Text></View>
+  <View style={styles.itemBox}><Text>{item.total_price}</Text></View>
+</View>
+)}></FlatList>
 
 
 
@@ -75,7 +89,7 @@ import {
       borderWidth: 2,
       borderRadius: 10,
       width: 350,
-      height: 160,
+      height: 50,
       justifyContent: "flex-start",
       alignItems: "flex-start",
       flexDirection: "row",
