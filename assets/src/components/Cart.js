@@ -4,7 +4,7 @@ import { useState } from "react";
 import { increaseItemCount, decreaseItemCount, totalItemCount, emptyCart, updateItemsDB} from "../redux/cartSlice";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from "@react-navigation/native";
-import { OrderSep, addOrder } from "../redux/myOrdersSlice";
+import { OrderSep, addOrder, cartGrab } from "../redux/myOrdersSlice";
 import { postNewUserOrder } from "../Services/Serverfetch";
 import { useEffect } from "react";
 import { getUserOrders } from "../Services/Serverfetch";
@@ -57,6 +57,7 @@ console.log(items, tokenValue)
   }
 
   navigation.navigate('myOrders');
+  dispatch(cartGrab(itemsWithCount))
   dispatch(emptyCart());
  getOrders();
   

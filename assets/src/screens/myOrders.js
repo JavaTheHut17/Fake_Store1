@@ -26,11 +26,82 @@ import { addOrder } from "../redux/myOrdersSlice";
     // const dispatch = useDispatch();
     const unpaidOrders = useSelector((state) => state.myOrders.unpaidOrders);
     const resUnpaidOrders = useSelector((state) => state.myOrders.resUnpaidOrders);
+const cartItems = useSelector((state) => state.myOrders.cartItems);
 
 
+// console.log('cart Items ', cartItems )
 
 console.log('unpaidOrders: ', unpaidOrders)
+let prodData = [];
 
+
+unpaidOrders.forEach(order => {
+  try {
+  
+    const jsonData = JSON.parse(order.order_items);
+
+   
+    const orderProdData = jsonData.map((item) => ({
+      item_id: item.prodID,
+      quantity: item.quantity,
+      price: item.price,
+      orderId: order.id,
+    }));
+
+    const newprodData = prodData.concat(orderProdData);
+console.log('new prod data', newprodData)
+    
+  } catch (e) {
+    console.error(`Error parsing JSON for order ID ${order.id}:`, e);
+  }
+});
+// console.log('prod data', prodData)
+
+const newData = unpaidOrders.map((item)=>({
+orderId: item.uid,
+is_delivered: item.is_delivered,
+is_paid: item.is_paid,
+item_numbers: item.item_numbers,
+total_price: item.total_price,
+id: item.id,
+
+}))
+
+const combData = newData.forEach((order) => {
+
+const combData = newData.concat(cartItems)
+
+return combData
+})
+
+// console.log('new Data', newData)
+
+// const resData = newData.concat(newprodData).concat(cartItems)
+// console.log('res Data', resData)
+
+
+// const combinedData = resData.reduce((acc, item) => {
+//   return { ...acc, ...item };
+// }, {});
+
+
+// console.log('combined data' , combinedData)
+
+// const newResData = resData.reduce((item)=>({
+// item_id: item.item_id,
+// order_id: item.orderId,
+// price: item.price,
+// quantity: item.quantity,
+// id: item.id,
+// is_delivered: item.is_delivered,
+// is_paid: item.is_paid,
+// item_numbers: item.item_numbers,
+// orderId: item.orderId,
+// total_price: item.total_price,
+
+// }))
+
+// console.log('new Res Data', newResData)
 
     return (
       <View style={styles.container}>
@@ -44,13 +115,14 @@ console.log('unpaidOrders: ', unpaidOrders)
         )}
    
 <FlatList
-data={unpaidOrders}
+data={newData}
 renderItem={({ item }) => (
 <View>
-  <View style={styles.itemBox}><Text>{item.title}</Text></View>
-  <View style={styles.itemBox}><Text>{item.id}</Text></View>
-  <View style={styles.itemBox}><Text>{item.order_items}price</Text></View>
-  <View style={styles.itemBox}><Text>{item.total_price}</Text></View>
+  <View style={styles.itemBox}>
+  <Text>Order Id: {item.orderId}</Text>
+  <Text>Is Delivered: {item.is_delivered}</Text>
+  <Text>Total Price: {item.total_price}</Text>
+  </View>
 </View>
 )}></FlatList>
 
@@ -89,10 +161,10 @@ renderItem={({ item }) => (
       borderWidth: 2,
       borderRadius: 10,
       width: 350,
-      height: 50,
-      justifyContent: "flex-start",
-      alignItems: "flex-start",
-      flexDirection: "row",
+      height: 100,
+      justifyContent: "center",
+      alignItems: "center",
+      flexDirection: "column",
     },
     imageBoxContainer: {
       height: 130,
@@ -110,11 +182,18 @@ renderItem={({ item }) => (
     },
   
     imageBox: {
-      height: 120,
-      width: 120,
+      height: 80,
+      width: 80,
       resizeMode: "contain",
       backgroundColor: "white",
     },
+    image: {
+      padding: 10,
+      height: 80,
+      width: 80,
+      resizeMode: "contain",
+    },
+  
   
     titleText: {
       fontSize: 13,

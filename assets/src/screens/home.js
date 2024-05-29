@@ -84,6 +84,9 @@ const styles = StyleSheet.create({
     width: 300,
     height: 50,
     marginTop: 20,
+    justifyContent: "center",
+    alignContent: "center",
+    flexDirection:'row',
   },
 
   categoryTitleBox: {

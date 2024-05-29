@@ -9,6 +9,7 @@ unpaidOrders:[],
 itemGroup:1,
 resUnpaidOrders:[],
 token:'',
+cartItems:[],
 
 
   },
@@ -29,6 +30,15 @@ state.token = action.payload
 
 },
 
+
+
+cartGrab: (state, action) =>{
+
+state.cartItems = action.payload
+
+
+
+},
 // OrderSep :(state, action) => {
 // const data = action.payload;
 // const res = data.map((item)=>({
@@ -48,9 +58,10 @@ state.token = action.payload
 });
 
 
-export const {addOrder, tokenGrab, OrderSep} = myOrdersSlice.actions;
+export const {addOrder, tokenGrab, OrderSep, cartGrab} = myOrdersSlice.actions;
 export const unpaidOrders = (state) => state.myOrders.unpaidOrders;
 export const resUnpaidOrders = (state) => state.myOrders.resUnpaidOrders;
 export const token = (state) => state.myOrders.token;
+export const cartItems = (state) => state.myOrders.cartItems;
 
 export default myOrdersSlice.reducer;

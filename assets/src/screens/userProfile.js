@@ -200,6 +200,7 @@ setNewItems('');
             />
             <Button style={styles.buttonBox} title="Log In" onPress={() => logIn()} />
             <Button title='Sign Up?' onPress={() => logInSwitchFunc()} />
+            
                 </View> 
                 </View>
 )}
@@ -210,10 +211,11 @@ setNewItems('');
   <View style={styles.categoryTitleBox}>
     <Text style={styles.categoryTitle}>User Profile:</Text>
   </View>  
-    <Text style={styles.textWindow}>Name:{newItems.name}</Text>
-   <Text style={styles.textWindow}>Email:{newItems.email}</Text>
+    <Text style={styles.textWindow}>Name:  {newItems.name}</Text>
+   <Text style={styles.textWindow}>Email:  {newItems.email}</Text>
 <Button title="Sign Out" onPress={() => signOut()} />
 <Button title='Update Profile' />
+
 </View>
 }
 
@@ -333,11 +335,12 @@ setNewItems('');
     textWindow: {
 
         backgroundColor: "white",
-        width: 170,
+        width: 230,
         padding:5,
         marginTop:5,
         textAlign: "center",
         borderWidth:1,
+        
 
 
 
